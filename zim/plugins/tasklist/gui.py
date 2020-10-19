@@ -126,7 +126,7 @@ class TaskListDialog(TaskListWidgetMixin, Dialog):
 
 		# Task list
 		self.uistate.setdefault('only_show_act', False)
-		self.uistate.setdefault('show_flatlist', False)
+		self.uistate.setdefault('show_flatlist', True)
 		self.uistate.setdefault('sort_column', 0)
 		self.uistate.setdefault('sort_order', int(Gtk.SortType.DESCENDING))
 
@@ -175,6 +175,19 @@ class TaskListDialog(TaskListWidgetMixin, Dialog):
 		self.act_toggle.connect('toggled', on_show_active_toggle)
 		self.uistate.connect('changed', lambda o: self.act_toggle.set_active(self.uistate['only_show_act']))
 		hbox.pack_start(self.act_toggle, False, True, 0)
+
+		def on_flatlist_toggle(o):
+			active = self.flatlist_toggle.get_active()
+			logger.debug("Flatlist status: '%s'" % active)
+			self.uistate['show_flatlist'] = active
+			self.task_list.set_flatlist(active)
+
+		self.flatlist_toggle = Gtk.CheckButton(_('Show Flatlist'))
+		# T: Checkbox in task list
+		self.flatlist_toggle.set_active(self.uistate['show_flatlist'])
+		self.flatlist_toggle.connect('toggled', on_flatlist_toggle)
+		#self.uistate.connect('changed', lambda o: self.flatlist_toggle.set_active(self.uistate['show_flatlist']))
+		hbox.pack_start(self.flatlist_toggle, False, True, 0)
 
 		# Statistics label
 		self.statistics_label = Gtk.Label()
