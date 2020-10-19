@@ -70,7 +70,7 @@ class FilesLayout(NotebookLayout):
 	like-named file.
 	'''
 
-	default_extension = '.txt'
+	default_extension = '.tzt'
 	default_format = get_format('wiki')
 
 	def __init__(self, folder, endofline=_EOL):
