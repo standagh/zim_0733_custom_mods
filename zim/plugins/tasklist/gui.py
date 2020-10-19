@@ -474,10 +474,24 @@ class TaskListTreeView(BrowserTreeView):
 		dayafter = str(datetime.date.today() + datetime.timedelta(days=delta2))
 		def render_date(col, cell, model, i, data):
 			date = model.get_value(i, self.DUE_COL)
+			if date.strip() == '' or date.strip() == '9999':
+				date_diff = None
+			else:
+				logger.debug("Date to split is '%s'" % str(date))
+				dsplit = date.split('-')
+				try:
+					date_date = datetime.date(int(dsplit[0]),int(dsplit[1]),int(dsplit[2]))
+					date_diff = (date_date - datetime.date.today()).days
+				except Exception as e:
+					logger.error(str(e))
+					date_diff = None
 			if date == _MAX_DUE_DATE:
 				cell.set_property('text', '')
 			else:
-				cell.set_property('text', date)
+				if date_diff is None:
+					cell.set_property('text', date)
+				else:
+					cell.set_property('text', "%s (%s)" % (date,date_diff))
 				# TODO allow strftime here
 
 			if date <= today:
