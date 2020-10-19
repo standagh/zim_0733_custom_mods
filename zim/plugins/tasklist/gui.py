@@ -420,7 +420,7 @@ class TaskListTreeView(BrowserTreeView):
 				bg = None
 			else:
 				bg = COLORS[min(prio, 3)]
-			cell.set_property('markup', text)
+			cell.set_property('markup', str(prio))
 			cell.set_property('cell-background', bg)
 
 		cell_renderer = Gtk.CellRendererText()
@@ -428,6 +428,16 @@ class TaskListTreeView(BrowserTreeView):
 		column.set_cell_data_func(cell_renderer, render_prio)
 		column.set_sort_column_id(self.PRIO_SORT_COL)
 		self.append_column(column)
+
+		# Rendering for page name column
+		if column_layout == self.RICH_COLUMN_LAYOUT:
+			cell_renderer = Gtk.CellRendererText()
+			column = Gtk.TreeViewColumn(_('Page'), cell_renderer, text=self.PAGE_COL)
+            # T: Column header Task List dialog
+			column.set_sort_column_id(self.PAGE_COL)
+			column.set_resizable(True)
+			column.set_max_width(320)
+			self.append_column(column)
 
 		# Rendering for task description column
 		cell_renderer = Gtk.CellRendererText()
@@ -483,18 +493,10 @@ class TaskListTreeView(BrowserTreeView):
 
 		if column_layout != self.COMPACT_COLUMN_LAYOUT:
 			cell_renderer = Gtk.CellRendererText()
-			column = Gtk.TreeViewColumn(_('Date'), cell_renderer)
+			column = Gtk.TreeViewColumn(_('Due'), cell_renderer)
 				# T: Column header Task List dialog
 			column.set_cell_data_func(cell_renderer, render_date)
 			column.set_sort_column_id(self.DUE_COL)
-			self.append_column(column)
-
-		# Rendering for page name column
-		if column_layout == self.RICH_COLUMN_LAYOUT:
-			cell_renderer = Gtk.CellRendererText()
-			column = Gtk.TreeViewColumn(_('Page'), cell_renderer, text=self.PAGE_COL)
-					# T: Column header Task List dialog
-			column.set_sort_column_id(self.PAGE_COL)
 			self.append_column(column)
 
 		# Finalize
