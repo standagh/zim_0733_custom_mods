@@ -54,6 +54,8 @@ def _parse_environment_param(value, installdir):
 def init_logging():
 	import logging
 
+	logging.basicConfig( level=logging.DEBUG, format="%(asctime)s - %(levelname)s - %(thread)d - %(name)s - %(module)s:%(funcName)s:%(lineno)d - %(message)s"  )
+
 	# Win32: must setup log file or it tries to write to $PROGRAMFILES
 	# See http://www.py2exe.org/index.cgi/StderrLog
 	# If startup is OK, this will be overruled in zim/main with per user log file
